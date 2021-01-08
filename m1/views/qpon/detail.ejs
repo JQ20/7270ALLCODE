@@ -1,0 +1,39 @@
+<div class="bd-lead bd-side" style="padding: 3rem;margin-left: -3rem;">
+    <header class="bd-header">
+      <div class="bd-header-titles">
+        <h1 class="title">
+            <%= Qpon.Title %>
+        </h1>
+        <p class="subtitle is-4" style="color: #7a7a7a;"><%= Qpon.Restaurant %></p>
+  
+      </div>
+  
+    </header>
+  </div>
+
+<div class="columns" style="margin-bottom: 2rem;">
+    <div class="column is-two-thirds">
+        <div class="">
+            <figure class="image is-2by1">
+              <img src="../../../<%=Qpon.Image %>">
+             </figure>
+          </div>
+    </div>
+    <div class="column" >
+
+        <div class="content">
+            <ul type="" style="font-size: 1.2rem;">
+              <li style="margin-bottom: 1rem;font-weight: 700;" ><%= Qpon.Restaurant %></li>
+              <li style="margin-bottom: 1rem;font-weight: 700;"><%= Qpon.Title %></li>
+              <li style="margin-bottom: 1rem;"><b>Quota: </b><%= Qpon.Quota%></li>
+              <li style="margin-bottom: 1rem;"><b>Coins: </b><%= Qpon.Coins %></li>
+              <li style="margin-bottom: 1rem;"><b>Address:</b><%= Qpon.Mall %>,<%= Qpon.Region %></li>
+              <li style="margin-bottom: 1rem;"><b>Valid Till: </b><%= Qpon.DealValidTill %></li>
+              <li><%= Qpon.Detail %></li>
+            </ul>
+           
+          </div>
+
+    </div>
+
+  </div>

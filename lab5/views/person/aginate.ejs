@@ -1,0 +1,144 @@
+aginate develped by myself before the class </br></br>
+see the class version in "/person/aginate2"
+
+<div id="p2" style="margin-bottom: 1.5em;">
+
+
+</div>
+
+<nav class="pagination" role="navigation" aria-label="pagination">
+  <a class="pagination-previous" id="previousButton" onclick="setPaginate('previousButton')">Previous</a>
+  <a class="pagination-next" id="nextButton" onclick="setPaginate('nextButton')">Next page</a>
+  <ul class="pagination-list">
+    <li>
+      <a class="pagination-link" id="firstLink" onclick="setPaginate('firstLink')">1</a>
+    </li>
+    <li>
+      <span class="pagination-ellipsis">&hellip;</span>
+    </li>
+    <li>
+      <a class="pagination-link" id="previousLink" onclick="setPaginate('previousLink')">45</a>
+    </li>
+    <li>
+      <a class="pagination-link is-current" id="currentLink" onclick="setPaginate('currentLink')">46</a>
+    </li>
+    <li>
+      <a class="pagination-link" id="nextLink" onclick="setPaginate('nextLink')">47</a>
+    </li>
+    <li>
+      <span class="pagination-ellipsis">&hellip;</span>
+    </li>
+    <li>
+      <a class="pagination-link" id="lastLink" onclick="setPaginate('lastLink')">86</a>
+    </li>
+  </ul>
+</nav>
+
+<script>
+  function normalShow() {
+    console.log("执行一次");
+    var numOfRecords = parseInt("<%= numOfRecords %>");
+    var limit = Math.max(parseInt("<%= req.query.limit %>"), 2) || 2;
+    var offset = Math.max(parseInt("<%= req.query.offset %>"), 0) || 0;
+
+    var dynamicCode = '<table class="table is-bordered is-striped is-hoverable is-fullwidth">';
+    <% persons.forEach(function (person) { %>
+      dynamicCode += "<tr><td>" + "<%= person.name %>" + "</td><td>" + "<%= person.age %>" + "</td></tr>"; 
+    <%}); %>
+    document.querySelector("#p2").innerHTML = dynamicCode + "</table>";
+
+    var currentPageNumber = Math.floor(offset / limit) + 1;
+    previousLink.innerHTML = currentPageNumber - 1;
+    currentLink.innerHTML = currentPageNumber;
+    nextLink.innerHTML = currentPageNumber + 1;
+    lastLink.innerHTML = Math.ceil(numOfRecords / limit);
+    if (offset < limit) {
+            previousButton.setAttribute("disabled", true);
+            previousLink.style.display = "none";
+        }
+
+        if (offset + limit >= numOfRecords) {
+            nextButton.setAttribute("disabled", true);
+            nextLink.style.display = "none";
+        }
+  }
+
+var offset = 0;
+  async function setPaginate(type) {
+
+    var numOfRecords = parseInt("<%= numOfRecords %>");
+    var limit =  2;
+
+    switch (type) {
+      case "firstLink":
+        limit = 2;
+        offset = 0;
+        break;
+      case "previousButton":
+        limit = 2;
+        offset = offset - limit;
+        break;
+      case "previousLink":
+        limit = 2;
+        offset = offset - limit;
+        break;
+      case "currentLink":
+        limit = 2;
+        offset = offset;
+        break;
+      case "nextLink":
+        limit = 2;
+        offset = offset + limit;
+        break;
+      case "nextButton":
+        limit = 2;
+        offset = offset + limit;
+        break;
+      case "lastLink":
+        limit = 2;
+        offset = (Math.ceil(numOfRecords / limit) - 1) * limit;
+        break;
+    }
+    
+    // alert("click in limit and offset="+limit+","+offset);
+    var baseUrl = "/person/aginate?limit=" + limit + "&offset=" + offset;
+    var response = await fetch(baseUrl, {
+      method: "GET",
+    });
+    var msg = await response.json();
+
+    // alert(msg);
+    var dynamicCode = '<table class="table is-bordered is-striped is-hoverable is-fullwidth">';
+
+    msg.persons.forEach(function (person) {
+      dynamicCode += "<tr><td>" + person.name + "</td><td>" + person.age + "</td></tr>";
+    });
+    document.querySelector("#p2").innerHTML = dynamicCode + "</table>";
+
+    var currentPageNumber = Math.floor(offset / limit) + 1;
+
+    previousLink.innerHTML = currentPageNumber - 1;
+    currentLink.innerHTML = currentPageNumber;
+    nextLink.innerHTML = currentPageNumber + 1;
+    lastLink.innerHTML = Math.ceil(numOfRecords / limit);
+
+    if (offset < limit) {
+      previousButton.setAttribute("disabled", true);
+      previousLink.style.display = "none";
+    }else{
+      previousButton.removeAttribute("disabled");
+      previousLink.style.display = "block";
+    }
+
+    if (offset + limit >= numOfRecords) {
+      nextButton.setAttribute("disabled", true);
+      nextLink.style.display = "none";  
+    }else{
+      nextButton.removeAttribute("disabled");
+      nextLink.style.display = "block";
+    }
+  }
+ 
+  normalShow();
+
+</script>

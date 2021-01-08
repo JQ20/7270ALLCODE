@@ -1,0 +1,63 @@
+
+    <section class="is-primary is-fullheight">
+        <div class="hero-body">
+          <div class="container ">
+            <div class="columns is-centered">
+              <div class="column is-5-tablet is-4-desktop is-4-widescreen">
+                <div class="container has-text-centered" style="margin-bottom:1.5rem;">
+                <h3 class="title has-text-black-bis"> Sign in </h3>
+                <p class="subtitle has-text-grey"> Please sign in to proceed. </p>
+                </div>
+                <form action="/login" method="POST" class="box" onsubmit="submitForm(this);return false;">
+                  <div class="field">
+                    <label for="" class="label">Username</label>
+                    <div class="control has-icons-left">
+                      <input type="string" placeholder="e.g. James" class="input" name="username" required>
+                      <span class="icon is-small is-left">
+                        <i class="fas fa-user"></i>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label for="" class="label">Password</label>
+                    <div class="control has-icons-left">
+                      <input type="password" placeholder="*******" class="input" name="password" required>
+                      <span class="icon is-small is-left">
+                        <i class="fa fa-lock"></i>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="field has-text-centered">
+                    <button class="button is-success " type="submit" >
+                      Login
+                    </button>
+                  </div>
+                </form>
+                <div class="container has-text-centered" >
+                <p class="has-text-grey"><a href="../../signup">Sign Up</a>  </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <script>
+        async function submitForm(formElem){
+            var response = await fetch(formElem.action,{
+                method: formElem.method,
+                body:new FormData(formElem),
+            });
+    
+            if(response.ok){
+                var user = await response.json();
+                alert(user.message)
+                location.assign(document.referrer); 
+                
+            }else if(response.status == 401){
+                var msg = await response.json();
+                alert(msg);
+            }else{
+                alert(response.statusText);
+            }
+        };
+    </script>

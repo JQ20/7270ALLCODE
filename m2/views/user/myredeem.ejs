@@ -1,0 +1,68 @@
+<div class="bd-lead bd-side" style="padding: 3rem;margin-left: -3rem;">
+    <header class="bd-header">
+      <div class="bd-header-titles">
+        <h1 class="title">
+          Hi! <%=User.username%>
+        </h1>
+        <p class="subtitle is-4" style="color: #7a7a7a;">See your Redeem</p>
+        <ul type="" style="list-style-type:none;">
+          <li style="margin-bottom: 1rem;"><b>Age: </b><%= User.age%></li>
+          <li style="margin-bottom: 1rem;"><b>Gender: </b><%= User.gender %></li>
+          <li style="margin-bottom: 1rem;"><b>Role: </b><%= User.role%></li>
+          <li style="margin-bottom: 1rem;" class="is-size-4"><b  style="color: green; ">Account Balance: </b><%= User.account %></li>
+        </ul>
+      </div>
+
+    </header>
+  </div>
+
+
+  <table class='table is-bordered is-striped is-narrow is-hoverable is-fullwidth'>
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Title</th>
+        <th>Restaurant</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% 
+      var i = 1;
+      Qpon.forEach( function(Qpon) { %>
+      <tr> 
+          <td><%= i %></a></td>  
+          <td><%= Qpon.Title %></td> 
+          <td><%= Qpon.Restaurant %></td> 
+          <td><button class="button is-danger is-small" type="submit" onclick="onClickMoveOut('<%=Qpon.id%>','<%=User.id%>')">Cancel</button></td> 
+      </tr> 
+      <% i++; }); %>
+    </tbody>
+  
+  </table>
+
+  <script>
+    async function onClickMoveOut(id,uid){
+
+        var r = confirm("Do you want to cancel?");
+
+        if(r){
+            var response = await fetch("/cancel/"+ id +"/"+ uid,{
+                method:"DELETE",
+            });
+
+            if(response.ok){
+                var data = await response.json();
+                alert(data.message);
+                window.location.reload();
+            }else if(response.status==401){
+                var data = response.text();
+                alert(data);
+            }else{
+                alert(response.statusText);
+            }
+        }
+};
+
+</script>
+

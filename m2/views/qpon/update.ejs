@@ -1,0 +1,179 @@
+<div class="bd-lead bd-side" style="padding: 3rem;margin-left: -3rem;">
+    <header class="bd-header">
+      <div class="bd-header-titles">
+        <h1 class="title">
+          Update dining coupons
+        </h1>
+        <p class="subtitle is-5" style="color: #7a7a7a;">Qpon - Redeem your coins for dining coupons</p>
+
+      </div>
+
+    </header>
+  </div>
+
+
+<form action="" name="update" method="post"   onsubmit="return sumbit_sure()">
+
+  <div class="columns">
+    <div class="column">
+      <div class="field">
+        <label class="label">Title</label>
+        <div class="control">
+          <input class="input" type="text" name="Title" required value="<%= Qpon.Title %>">
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Restaurant</label>
+        <div class="control">
+          <input class="input" type="text" name="Restaurant" required value="<%= Qpon.Restaurant %>">
+        </div>
+      </div>
+
+      <div class="columns" style="margin-bottom: 0;">
+        <div class="column">
+
+          <div class="field">
+            <label class="label">Region</label>
+            <div class="control">
+              <div class="select" id="regionselect">
+                <select name="Region">
+                <option value="Kowloon" 
+                <%if(Qpon.Region =="Kowloon"){%>
+                    selected
+                <%}%>       
+                    >Kowloon</option>
+                  <option value="HK Island"
+                  <%if(Qpon.Region =="HK Island"){%>
+                    selected
+                <%}%>>HK Island</option>
+                  <option value="New Territories" 
+                  <%if(Qpon.Region =="New Territories"){%>
+                    selected
+                <%}%>>New Territories</option>
+                </select>
+              </div>    
+            </div>
+          </div>
+
+        </div>
+        <div class="column">
+          <div class="field">
+            <label class="label">Mall</label>
+            <div class="control">
+              <div class="select" id="mallselect" >
+                <select name="Mall">
+                  <option value="Elements" 
+                  <%if(Qpon.Mall =="Elements"){%>
+                    selected
+                <%}%>>Elements</option>
+                  <option value="IFC Mall"  
+                  <%if(Qpon.Mall =="IFC Mall"){%>
+                    selected
+                <%}%>>IFC Mall</option>
+                  <option value="Festival Walk"
+                  <%if(Qpon.Mall =="Festival Walk"){%>
+                    selected
+                <%}%>>Festival Walk</option>
+                  <option value="Tsuen Wan Plaza" 
+                  <%if(Qpon.Mall =="Tsuen Wan Plaza"){%>
+                    selected
+                <%}%>>Tsuen Wan Plaza</option>
+                  <option value="Pacific Place" 
+                  <%if(Qpon.Mall =="Pacific Place"){%>
+                    selected
+                <%}%>>Pacific Place</option>
+                  <option value="Times Square" 
+                  <%if(Qpon.Mall =="Times Square"){%>
+                    selected
+                <%}%>>Times Square</option> 
+                  <option value="Harbour City" 
+                  <%if(Qpon.Mall =="Harbour City"){%>
+                    selected
+                <%}%>>Harbour City</option>
+                  <option value="Megabox" 
+                  <%if(Qpon.Mall =="Megabox"){%>
+                    selected
+                <%}%>>Megabox</option>
+                  <option value="APM" 
+                  <%if(Qpon.Mall =="APM"){%>
+                    selected
+                <%}%>>APM</option>
+                  <option value="New Town Plaz" 
+                  <%if(Qpon.Mall =="New Town Plaz"){%>
+                    selected
+                <%}%>>New Town Plaza</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Image</label>
+        <div class="control">
+          <input class="input" type="text" name="Image" required value= "<%= Qpon.Image %>" > 
+        </div>
+      </div>
+      
+      
+    </div>
+
+
+    <div class="column">
+
+      <div class="columns" style="margin-bottom: 0;">
+        <div class="column">
+          <!-- <div class="field"> -->
+            <label class="label">Quota</label>
+            <div class="control">
+              <input class="input" type="number" name="Quota" required value=<%= Qpon.Quota %>>
+            </div>
+          <!-- </div> -->
+        </div>
+        <div class="column">
+          <!-- <div class="field"> -->
+            <label class="label">Coins</label>
+            <div class="control">
+              <input class="input" type="number" name="Coins" required value=<%= Qpon.Coins %>>
+            </div>
+          <!-- </div> -->
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Deal Valid Till</label>
+        <div class="control">
+          <input class="input" type="date" name="DealValidTill" required pattern="YYYY-MM-DD" value="<%= Qpon.DealValidTill%>">
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Detail</label>
+        <div class="control">
+          <textarea class="textarea" placeholder="<%= Qpon.Detail%>" name="Detail" required ></textarea>
+        </div>
+      </div>
+
+      <div class="field">
+        &nbsp;
+      </div>
+      <div class="field">
+        <div class="control is-pulled-right">
+            <button class="button is-success is-normal" type="submit" οnclick="updateQ()">Update</button>
+            
+      </div>
+    </div>
+  </div>
+  </div>
+
+<!-- </form>
+<form action="../../qpon/delete/<%=Qpon.id%>" name="delete" method="post"   onsubmit="return sumbit_sure()">
+    <div class="field" style="margin-top: 1rem;">
+        <div class="control is-pulled-right">
+    <button class="button is-danger is-normal" type="submit" >Delete&nbsp;</button>
+    </div>
+</div>
+</form> -->
+

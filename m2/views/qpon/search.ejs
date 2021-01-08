@@ -1,0 +1,170 @@
+<div class="columns">
+
+  <div class="column" id="searchform">
+    <div class="bd-lead bd-side" style="padding: 3rem;margin-left: -3rem;">
+      <header class="bd-header">
+        <div class="bd-header-titles">
+          <h1 class="title">
+            Search you want
+          </h1>
+          <p class="subtitle is-4" style="color: #7a7a7a;">Qpon - Redeem your coins for dining coupons</p>
+        </div>
+      </header>
+    </div>
+    <form action="../../qpon/search" name="search" method="get">
+      <div class="field">
+        <div class="select" >
+          <select name="region" value="<%req.query.region%>" id="region">
+            <option value="Kowloon">Kowloon</option>
+            <option value="HK Island">HK Island</option>
+
+            
+            <option value="New Territories">New Territories</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label" id="mincoin"  value="<%req.query.minc%>">Min Coin</label>
+
+        <input class="input" type="number" name="minc" required value="100">
+      </div>
+
+      <div class="field">
+        <label class="label" id="maxcoin"  value="<%req.query.maxc%>">Max Coin</label>
+
+        <input class="input" type="number" name="maxc" required value="1000">
+      </div>
+
+
+      <div class="field">
+        <label class="label" >Deal Valid Till</label>
+
+        <input class="input" type="date" name="date" id="date" required pattern="YYYY-MM-DD"  value="<%req.query.date%>">
+      </div>
+
+
+      <div class="field">
+        &nbsp;
+      </div>
+
+      <div class="field">
+        <div class="control is-primary is-pulled-right">
+          <button class="is-link button" type="submit" >Search</button>
+        </div>
+      </div>
+      <div class="field">
+        &nbsp;
+      </div>
+    </form>
+
+  </div>
+  
+  <div class="column" >
+    <div class="columns" id="result">
+      
+      
+    </div>
+
+    <nav class="pagination" role="navigation" aria-label="pagination">
+      <button class="pagination-previous" id="previousButton">Previous</button>
+      <button class="pagination-next" id="nextButton">Next page</button>
+      <ul class="pagination-list">
+        <li>
+          <a class="pagination-link" id="firstLink">1</a>
+        </li>
+        <li>
+          <span class="pagination-ellipsis">&hellip;</span>
+        </li>
+        <li>
+          <a class="pagination-link" id="previousLink">45</a>
+        </li>
+        <li>
+          <a class="pagination-link is-current" id="currentLink">46</a>
+        </li>
+        <li>
+          <a class="pagination-link" id="nextLink">47</a>
+        </li>
+        <li>
+          <span class="pagination-ellipsis">&hellip;</span>
+        </li>
+        <li>
+          <a class="pagination-link" id="lastLink">86</a>
+        </li>
+      </ul>
+    </nav>    
+
+  </div>
+</div>
+
+
+
+<script>
+  async function fetchPage(limit, offset) {
+
+    var response = await fetch("/search?limit=" + limit + "&offset=" + offset +"&region="+"<%= req.query.region %>"+"&minc="+"<%= req.query.minc %>"+"&maxc="+"<%= req.query.maxc %>"+"&date="+"<%= req.query.date %>", {
+      method: "GET"
+    });
+
+    if (response.ok) {
+      var qpons = await response.json();
+
+      var dynamicCode = '';
+      
+        var cardd= '<div class="card" style="margin-bottom: 1.5rem;margin-top: 2.25rem; "><div class="card-image">            <figure class="image is-2by1">              '+'<a href="../../../qpon/detail/';
+        var card2= '</figure>          </div>          <div class="card-content">            <div class="media">              <div class="">                <p class="title is-5">                  <a href="../../../qpon/detail/<%=Qpon.id%>"><%= Qpon.Restaurant %></a>                </p>                <p class="subtitle is-6">';
+        qpons.forEach(function (qpon) {
+        dynamicCode += ' <div class="column">'+cardd + qpon.id+'">'+'<img src="../../../'+qpon.Image+'"> </a>'+ card2 + qpon.Title + " </p></div> </div> <div class='content'> <div class='media-content'><p class='is-success'>" +"coins: "+ qpon.Coins + "</p></div></div></div></div></div>";
+      });
+
+      document.querySelector("#result").innerHTML = dynamicCode;
+      setPagination(limit, offset); 
+
+    } else {
+      alert(response.status + ": " + response.statusText);
+    }
+
+  }
+//give the first call of data
+  fetchPage(2, 0);
+
+  function setPagination(limit, offset) {
+
+    //a<> always capable to click,so change item to button
+    var numOfRecords = parseInt("<%= numOfRecords %>");
+
+    firstLink.onclick = function(){fetchPage(limit, 0);}
+    previousButton.onclick = function(){fetchPage(limit, offset - limit);}
+    previousLink.onclick = function(){fetchPage(limit, offset - limit);}
+    currentLink.onclick = function(){fetchPage(limit, offset);}
+    nextLink.onclick =function(){fetchPage(limit, offset + limit);}
+    nextButton.onclick = function(){fetchPage(limit, offset + limit)};
+    lastLink.onclick = function(){fetchPage(limit, (Math.ceil(numOfRecords / limit) - 1) * limit);}
+
+    var currentPageNumber = Math.floor(offset / limit) + 1;
+
+    previousLink.innerHTML = currentPageNumber - 1;
+    currentLink.innerHTML = currentPageNumber;
+    nextLink.innerHTML = currentPageNumber + 1;
+    lastLink.innerHTML = Math.ceil(numOfRecords / limit);
+
+    if (offset < limit) {
+      previousButton.setAttribute("disabled", true);
+      previousLink.style.display = "none";
+    }else{
+        previousButton.removeAttribute("disabled");
+        previousLink.style.display = "block";
+    }
+
+    if (offset + limit >= numOfRecords) {
+      nextButton.setAttribute("disabled", true);
+      nextLink.style.display = "none";
+    }else{
+        nextButton.removeAttribute("disabled");
+        nextLink.style.display = "block";
+    }
+
+  }
+
+</script>
+

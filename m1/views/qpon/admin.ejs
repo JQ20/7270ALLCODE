@@ -1,0 +1,32 @@
+<div class="bd-lead bd-side" style="padding: 3rem;margin-left: -3rem;">
+  <header class="bd-header">
+    <div class="bd-header-titles">
+      <h1 class="title">
+        Admin Data
+      </h1>
+      <p class="subtitle is-4" style="color: #7a7a7a;">Update details</p>
+    </div>
+  </header>
+</div>
+
+<table class='table is-bordered is-striped is-narrow is-hoverable is-fullwidth'>
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Title</th>
+      <th>Restaurant</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% Qpon.forEach( function(Qpon) { %>
+    <tr> 
+        <td><a href="../../qpon/detail/<%= Qpon.id %>"><%= Qpon.id %></a></td>  
+        <td><%= Qpon.Title %></td> 
+        <td><%= Qpon.Restaurant %></td> 
+        <td><a href="../../qpon/update/<%= Qpon.id %>">Update</a></td> 
+    </tr> 
+    <% }); %>
+  </tbody>
+
+</table>

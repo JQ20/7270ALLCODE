@@ -1,0 +1,191 @@
+<div class="columns">
+
+  <div class="column">
+    <div class="bd-lead bd-side" style="padding: 3rem;margin-left: -3rem;">
+      <header class="bd-header">
+        <div class="bd-header-titles">
+          <h1 class="title">
+            Search you want
+          </h1>
+          <p class="subtitle is-4" style="color: #7a7a7a;">Qpon - Redeem your coins for dining coupons</p>
+        </div>
+      </header>
+    </div>
+    <form action="../../qpon/search" name="search" method="get">
+      <div class="field">
+        <div class="select" >
+          <select name="region" value="<%req.query.region%>" id="region">
+            <option value="Kowloon">Kowloon</option>
+            <option value="HK Island">HK Island</option>
+            <option value="New Territories">New Territories</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label" id="mincoin"  value="<%req.query.minc%>">Min Coin</label>
+
+        <input class="input" type="number" name="minc" required value="100">
+      </div>
+
+      <div class="field">
+        <label class="label" id="maxcoin"  value="<%req.query.maxc%>">Max Coin</label>
+
+        <input class="input" type="number" name="maxc" required value="1000">
+      </div>
+
+
+      <div class="field">
+        <label class="label" >Deal Valid Till</label>
+
+        <input class="input" type="date" name="date" id="date" required pattern="YYYY-MM-DD"  value="<%req.query.date%>">
+      </div>
+
+
+      <div class="field">
+        &nbsp;
+      </div>
+
+      <div class="field">
+        <div class="control is-primary is-pulled-right">
+          <button class="is-link button" type="submit" >Search</button>
+        </div>
+      </div>
+      <div class="field">
+        &nbsp;
+      </div>
+    </form>
+
+  </div>
+  <%if(Qpons.length!=0){%>
+  <div class="column">
+    <div class="columns">
+      <% Qpons.forEach( function(Qpon) { %>
+      <div class="column">
+        <div class="card" style="margin-bottom: 1.5rem;margin-top: 2.25rem; ">
+          <div class="card-image">
+            <figure class="image is-2by1">
+              <a href="../../../qpon/detail/<%=Qpon.id%>"><img src="../../../<%=Qpon.Image %>"> </a>
+            </figure>
+          </div>
+          <div class="card-content">
+            <div class="media">
+              <div class="">
+                <p class="title is-5">
+                  <a href="../../../qpon/detail/<%=Qpon.id%>"><%= Qpon.Restaurant %></a>
+                </p>
+                <p class="subtitle is-6">
+                  <%= Qpon.Title %>
+                </p>
+              </div>
+            </div>
+
+            <div class='content'>
+              <div class="media-content">
+                <p class='is-success'>
+                  coins: <%= Qpon.Coins %>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <% }); %>
+    </div>
+
+  <nav class="pagination" role="navigation" aria-label="pagination"
+    style="padding-left: 0.75rem;padding-right: 0.75rem;">
+    <a class="pagination-previous" id="previousButton">Previous</a>
+    <a class="pagination-next" id="nextButton">Next page</a>
+    <ul class="pagination-list">
+      <li>
+        <a class="pagination-link" id="firstLink">1</a>
+      </li>
+      <li>
+        <span class="pagination-ellipsis">&hellip;</span>
+      </li>
+      <li>
+        <a class="pagination-link" id="previousLink">45</a>
+      </li>
+      <li>
+        <a class="pagination-link is-current" id="currentLink">46</a>
+      </li>
+      <li>
+        <a class="pagination-link" id="nextLink">47</a>
+      </li>
+      <li>
+        <span class="pagination-ellipsis">&hellip;</span>
+      </li>
+      <li>
+        <a class="pagination-link" id="lastLink">86</a>
+      </li>
+    </ul>
+  </nav>
+
+
+
+  </div>
+  <%}else{%>
+    <div class="column ">
+      <figure class="image container is-256x256" style="margin-bottom: 1.5rem;margin-top: 2.25rem; ">
+        <img src="../../images/notFound.jpg" class="">
+    </figure>
+    
+  </div>
+  <%}%>
+</div>
+
+<script>
+  function setPagination() {
+
+    var previousButton = document.getElementById("previousButton");
+    var nextButton = document.getElementById("nextButton");
+    var currentLink = document.getElementById("currentLink");
+    var previousLink = document.getElementById("previousLink");
+    var nextLink = document.getElementById("nextLink");
+    var firstLink = document.getElementById("firstLink");
+    var lastLink = document.getElementById("lastLink");
+
+    var numOfRecords = parseInt("<%=numOfRecords %>");
+    // { Title: "50% discount on Supreme Seafood Feast (for 2 persons)", Restaurant: "Mongo Tree", Region: "Kowloon", Mall: "Elements", Image: "images/p1.jpg", Quota: 500, Coins: 750, DealValidTill: "2021-12-09", Detail: "Original Price: HK$790 perperson." },
+    var region = document.getElementById("region");
+    var mincoin = document.getElementById("mincoin");
+    var maxcoin = document.getElementById("maxcoin");
+    var date = document.getElementById("date");
+
+    var limit = Math.max(parseInt("<%= req.query.limit %>"), 2) || 2;
+    var offset = Math.max(parseInt("<%= req.query.offset %>"), 0) || 0;
+
+    var baseUrl = "../../qpon/search?"+"region="+"<%= req.query.region %>"+"&minc="+"<%= req.query.minc %>"+"&maxc="+"<%= req.query.maxc %>"+"&date="+"<%= req.query.date %>"+"&limit=" + limit +"&offset=";
+
+    firstLink.href = baseUrl + 0;
+    previousButton.href = baseUrl + (offset - limit);
+    previousLink.href = baseUrl + (offset - limit);
+    currentLink.href = baseUrl + offset;
+    nextLink.href = baseUrl + (offset + limit);
+    nextButton.href = baseUrl + (offset + limit);
+    lastLink.href = baseUrl + (Math.ceil(numOfRecords / limit) - 1) * limit;
+
+    var currentPageNumber = Math.floor(offset / limit) + 1;
+
+    previousLink.innerHTML = currentPageNumber - 1;
+    currentLink.innerHTML = currentPageNumber;
+    nextLink.innerHTML = currentPageNumber + 1;
+    lastLink.innerHTML = Math.ceil(numOfRecords / limit);
+
+    if (offset < limit) {
+      previousButton.setAttribute("disabled", true);
+      previousButton.href = "";
+      previousLink.style.display = "none";
+    }
+
+    if (offset + limit >= numOfRecords) {
+      nextButton.setAttribute("disabled", true);
+      nextButton.href = "";
+      nextLink.style.display = "none";
+    }
+  }
+
+  setPagination();
+
+</script>

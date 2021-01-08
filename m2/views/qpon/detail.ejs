@@ -1,0 +1,131 @@
+<%
+
+var user_uid = req.session.uid || -1;
+var user_role = req.session.role;
+var user_number =  uiList.length;
+var available = Qpon.Quota - user_number;
+var exit_index = uiList.indexOf(user_uid); 
+
+%>
+
+<div class="bd-lead bd-side" style="padding: 3rem;margin-left: -3rem;">
+  <header class="bd-header">
+    <div class="bd-header-titles">
+      <h1 class="title">
+        <%= Qpon.Title %>
+      </h1>
+      <p class="subtitle is-4" style="color: #7a7a7a;"><%= Qpon.Restaurant %></p>
+
+    </div>
+
+  </header>
+</div>
+
+<div class="columns" style="margin-bottom: 2rem;">
+  <div class="column is-two-thirds">
+    <div class="">
+      <figure class="image is-2by1">
+        <img src="../../../<%=Qpon.Image %>">
+      </figure>
+    </div>
+  </div>
+  <div class="column">
+
+    <div class="content">
+      <ul type="" style="font-size: 1.2rem;">
+        <li style="margin-bottom: 1rem;font-weight: 700;"><%= Qpon.Restaurant %></li>
+        <li style="margin-bottom: 1rem;font-weight: 700;"><%= Qpon.Title %></li>
+        <li style="margin-bottom: 1rem;"><b>Quota: </b><%= Qpon.Quota%></li>
+        <li style="margin-bottom: 1rem;"><b>Coins: </b><%= Qpon.Coins %></li>
+        <li style="margin-bottom: 1rem;"><b>Address:</b><%= Qpon.Mall %>,<%= Qpon.Region %></li>
+        <li style="margin-bottom: 1rem;"><b>Valid Till: </b><%= Qpon.DealValidTill %></li>
+        <li><%= Qpon.Detail %></li>
+        <li>
+          <%if(available<=0){%>
+          <b style="color: red;">Insufficient coupons.</b>
+          <%}else{%>
+          <b style="color: green;">Balance:&nbsp;</b><%=available%>
+          <%}%>
+            </li>
+        <%if(user_uid == -1){%>
+        <li style="list-style-type:none;margin-top: 2rem">
+          <b style="color: red;list-style-type:none;font-size: 1.5rem;">Please sign in to redeem</b>
+        </li>
+        <%}else if(user_role=="user"){%>
+                  <%if(exit_index<0) {%>
+                      <%if(available>0){ %>
+                            <li style="list-style-type:none;margin-top: 2rem;">
+                              <button class="button is-warning " type="button" onclick="onClickRedeem()">Redeem</button>
+                            </li>
+                      <%}%>
+                  <%}else {%>
+                    <li style="list-style-type:none;margin-top: 2rem;">
+                      <button class="button is-danger " type="button" onclick="onClickCancel()">Cancel</button>
+                    </li>
+                  <%}%>
+        <%}%>
+        
+        
+            </ul>
+ 
+            
+           
+          </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    async function onClickRedeem(){
+
+if(parseInt(<%=user_uid%>) >= 0){
+
+        var r = confirm("Redeem this coupon?");
+
+        if(r){
+        var response = await fetch("../../redeem/" + <%=Qpon.id%> +"/"+ <%=user_uid%>,{
+        method: "POST",
+        });
+
+        if(response.ok){    
+        var data = await response.json();
+        alert(data.message);
+        location.assign(data.url);
+        }else if(response.status==401){
+        var data = response.text();
+        alert(data);
+        }else{
+        alert(response.statusText);
+        }
+        }
+        }
+
+        };
+
+
+async function onClickCancel(){
+    if(parseInt(<%=user_uid%>) >= 0){
+
+    var r = confirm("Do you want to cancel?");
+
+        if(r){
+            var response = await fetch("/cancel/"+ <%=Qpon.id%> +"/"+ <%=user_uid%>,{
+                method:"DELETE",
+            });
+
+            if(response.ok){
+                var data = await response.json();
+                alert(data.message);
+                location.assign(data.url);
+            }else if(response.status==401){
+                var data = response.text();
+                alert(data);
+            }else{
+                alert(response.statusText);
+            }
+        }
+    }
+};
+
+        </script>

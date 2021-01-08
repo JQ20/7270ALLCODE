@@ -1,0 +1,43 @@
+<h1>User: <%=User.username%></h1>
+
+<table class="table is-bordered is-striped is-hoverable is-fullwidth">
+    
+    <% QponList.forEach( function(qpon) { %>
+    
+        <tr><td><%= qpon.Restaurant %></td><td><%= qpon.Coins %></td>
+        <td>
+         <button class="button" type="submit" onclick="onClickMoveOut('<%=qpon.id%>','<%=User.id%>')">Cancel</button>
+        </td> 
+        </tr>
+    
+    <% }); %>
+
+</table>
+
+
+<script>
+    //cancel botton
+    async function onClickMoveOut(id,uid){
+
+        var r = confirm("Do you want to cancel?");
+
+        if(r){
+            var response = await fetch("/cancel/"+ id +"/"+ uid,{
+                method:"DELETE",
+            });
+
+            if(response.ok){
+                var data = await response.json();
+                alert(data.message);
+                window.location.reload();
+            }else if(response.status==401){
+                var data = response.text();
+                alert(data);
+            }else{
+                alert(response.statusText);
+            }
+        }
+};
+
+</script>
+

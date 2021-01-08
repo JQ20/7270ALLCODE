@@ -1,0 +1,61 @@
+<div class="bd-lead bd-side" style="padding: 3rem;margin-left: -3rem;">
+    <header class="bd-header">
+      <div class="bd-header-titles">
+        <h1 class="title">
+            Users Redeeming coupons of <%=Qpon.Restaurant%>
+        </h1>
+        <p class="subtitle is-4" style="color: #7a7a7a;"><b>Coupons id : </b><%=Qpon.id%></p>
+      </div>
+    </header>
+  </div>
+
+
+  <table class='table is-bordered is-striped is-narrow is-hoverable is-fullwidth'>
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Username</th>
+        <th>Account Balance</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% 
+      var i = 1;
+      User.forEach( function(User) { %>
+      <tr> 
+          <td><%= i %></a></td>  
+          <td><%= User.username %></td> 
+          <td><%= User.account %></td> 
+          <td><button class="button is-danger is-small" type="submit" onclick="onClickMoveOut('<%=Qpon.id%>','<%=User.id%>')">Cancel</button></td> 
+      </tr> 
+      <% i++; }); %>
+    </tbody>
+  
+  </table>
+
+  <script>
+    async function onClickMoveOut(id,uid){
+
+        var r = confirm("Do you want to cancel?");
+
+        if(r){
+            var response = await fetch("/cancel/"+ id +"/"+ uid,{
+                method:"DELETE",
+            });
+
+            if(response.ok){
+                var data = await response.json();
+                alert(data.message);
+                window.location.reload();
+            }else if(response.status==401){
+                var data = response.text();
+                alert(data);
+            }else{
+                alert(response.statusText);
+            }
+        }
+};
+
+</script>
+
