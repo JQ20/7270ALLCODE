@@ -16,7 +16,7 @@ a Voucher application will
 ## Content
 - <a href="#m1">Milestone 1 in Web</a>
 - <a href="#m2">Milestone 2 in Web</a>
-- <a href="#m3">Milestone 3 </a>
+- <a href="#m3">Milestone 3 in Mobile</a>
 
 
 ## <a name="m1">Milestone 1</a>
