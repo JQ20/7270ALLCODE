@@ -14,8 +14,8 @@ a Voucher application will
 - help restaurants pre-set the amount , quantity and valid dates of Voucher at ease.
 
 ## Content
-- <a href="#m1">Milestone 1</a>
-- <a href="#m2">Milestone 2</a>
+- <a href="#m1">Milestone 1 in Web</a>
+- <a href="#m2">Milestone 2 in Web</a>
 - <a href="#m3">Milestone 3 </a>
 
 
