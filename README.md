@@ -7,7 +7,8 @@
 
 # Qpon 
 
-support Web and Mobile
+support Web (m1 & m2) and Mobile (m3)
+
 a Voucher application will
 - help users valid and search Voucher at ease.
 - help restaurants pre-set the amount , quantity and valid dates of Voucher at ease.
